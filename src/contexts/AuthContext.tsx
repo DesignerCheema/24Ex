@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle();
       
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Database query timeout')), 10000);
+        setTimeout(() => reject(new Error('Database query timeout')), 30000);
       });
       
       let userProfile = null;
