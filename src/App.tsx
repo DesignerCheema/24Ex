@@ -17,8 +17,8 @@ import Settings from './pages/Settings';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <ProtectedRoute>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -36,8 +36,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ProtectedRoute>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
