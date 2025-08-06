@@ -134,9 +134,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: userProfile.email,
           role: userProfile.role,
           phone: userProfile.phone,
+          avatar: userProfile.avatar,
           permissions: userProfile.permissions || [],
           isActive: userProfile.is_active,
           createdAt: new Date(userProfile.created_at),
+          lastLogin: userProfile.last_login ? new Date(userProfile.last_login) : undefined,
         };
 
         console.log('Dispatching LOGIN_SUCCESS with database user:', user);

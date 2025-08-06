@@ -421,6 +421,58 @@ export default function WarehousePage() {
     }
   };
 
+  const handleAssignReceivingTask = async (taskId: string, userId: string) => {
+    try {
+      const updatedTask = await WarehouseService.updateReceivingTask(taskId, {
+        assignedTo: userId,
+        status: 'assigned'
+      });
+      setReceivingTasks(receivingTasks.map(task => task.id === taskId ? updatedTask : task));
+    } catch (error) {
+      console.error('Failed to assign receiving task:', error);
+      alert('Failed to assign receiving task. Please try again.');
+    }
+  };
+
+  const handleStartReceivingTask = async (taskId: string) => {
+    try {
+      const updatedTask = await WarehouseService.updateReceivingTask(taskId, {
+        status: 'in_progress',
+        startedAt: new Date()
+      });
+      setReceivingTasks(receivingTasks.map(task => task.id === taskId ? updatedTask : task));
+    } catch (error) {
+      console.error('Failed to start receiving task:', error);
+      alert('Failed to start receiving task. Please try again.');
+    }
+  };
+
+  const handleCompleteReceivingTask = async (taskId: string) => {
+    try {
+      const updatedTask = await WarehouseService.updateReceivingTask(taskId, {
+        status: 'completed',
+        completedAt: new Date()
+      });
+      setReceivingTasks(receivingTasks.map(task => task.id === taskId ? updatedTask : task));
+    } catch (error) {
+      console.error('Failed to complete receiving task:', error);
+      alert('Failed to complete receiving task. Please try again.');
+    }
+  };
+
+  const handleCreateReceivingTask = async (data: any) => {
+    try {
+      setLoading(true);
+      const newTask = await WarehouseService.createReceivingTask(data);
+      setReceivingTasks([...receivingTasks, newTask]);
+    } catch (error) {
+      console.error('Failed to create receiving task:', error);
+      alert('Failed to create receiving task. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Calculate statistics
   const warehouseStats = {
     total: warehouses.length,
@@ -441,6 +493,13 @@ export default function WarehousePage() {
     pending: pickingTasks.filter(task => task.status === 'pending').length,
     inProgress: pickingTasks.filter(task => task.status === 'in_progress').length,
     completed: pickingTasks.filter(task => task.status === 'completed').length
+  };
+
+  const receivingStats = {
+    total: receivingTasks.length,
+    pending: receivingTasks.filter(task => task.status === 'pending').length,
+    inProgress: receivingTasks.filter(task => task.status === 'in_progress').length,
+    completed: receivingTasks.filter(task => task.status === 'completed').length
   };
 
   const tabs = [
