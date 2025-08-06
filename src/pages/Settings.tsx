@@ -5,7 +5,7 @@ import {
   ShieldCheckIcon,
   GlobeAltIcon,
   PaintBrushIcon,
-  DatabaseIcon,
+  ServerStackIcon,
   CloudIcon,
   KeyIcon,
   DocumentTextIcon,
@@ -129,7 +129,7 @@ export default function Settings() {
     { id: 'general', label: 'General', icon: CogIcon, permission: 'settings' },
     { id: 'notifications', label: 'Notifications', icon: BellIcon, permission: 'settings' },
     { id: 'security', label: 'Security', icon: ShieldCheckIcon, permission: 'security' },
-    { id: 'system', label: 'System', icon: DatabaseIcon, permission: 'system' },
+    { id: 'system', label: 'System', icon: ServerStackIcon, permission: 'system' },
     { id: 'backup', label: 'Backup & Restore', icon: CloudIcon, permission: 'backup' }
   ];
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DatabaseIcon, ServerIcon, CpuChipIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { ServerStackIcon, ServerIcon, CpuChipIcon, CheckCircleIcon, ExclamationTriangleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { SettingsService } from '../../services/settingsService';
 
 interface SystemSettingsProps {
@@ -157,7 +157,7 @@ export default function SystemSettingsComponent({ settings, onSave, loading }: S
       {/* Performance Metrics */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex items-center space-x-2 mb-4">
-          <DatabaseIcon className="h-5 w-5 text-green-600" />
+          <ServerStackIcon className="h-5 w-5 text-green-600" />
           <h3 className="text-lg font-semibold text-gray-900">Performance Metrics</h3>
         </div>
 
