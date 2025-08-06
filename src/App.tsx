@@ -10,6 +10,8 @@ import Transport from './pages/Transport';
 import WarehousePage from './pages/Warehouse';
 import Returns from './pages/Returns';
 import NotFound from './pages/NotFound';
+import Accounting from './pages/Accounting';
+import Analytics from './pages/Analytics';
 
 function App() {
   return (
@@ -24,8 +26,8 @@ function App() {
               <Route path="transport" element={<Transport />} />
               <Route path="warehouse" element={<WarehousePage />} />
               <Route path="returns" element={<Returns />} />
-              <Route path="accounting" element={<div className="p-6 text-center text-gray-500">Accounting Management - Coming Soon</div>} />
-              <Route path="analytics" element={<div className="p-6 text-center text-gray-500">Analytics & Reports - Coming Soon</div>} />
+              <Route path="accounting" element={<Accounting />} />
+              <Route path="analytics" element={<Analytics />} />
               <Route path="users" element={<div className="p-6 text-center text-gray-500">User Management - Coming Soon</div>} />
               <Route path="settings" element={<div className="p-6 text-center text-gray-500">Settings - Coming Soon</div>} />
             </Route>
