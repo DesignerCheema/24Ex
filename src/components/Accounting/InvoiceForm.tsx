@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { InvoiceFormData } from '../services/accountingService';
-import { OrderService } from '../services/orderService';
-import { Order, Customer } from '../types';
+import { InvoiceFormData } from '../../services/accountingService';
+import { OrderService } from '../../services/orderService';
+import { Order, Customer } from '../../types';
 
 interface InvoiceFormProps {
   isOpen: boolean;
