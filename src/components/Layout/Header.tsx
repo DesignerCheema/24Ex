@@ -1,6 +1,7 @@
 import React from 'react';
-import { BellIcon, MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { BellIcon, MagnifyingGlassIcon, ChevronDownIcon, UserIcon, CogIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 export default function Header() {
   const { state, logout } = useAuth();
@@ -49,12 +50,14 @@ export default function Header() {
             
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <div className="py-1">
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                <Link to="/users" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <UserIcon className="h-4 w-4 mr-2" />
                   Profile Settings
-                </a>
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Account Settings
-                </a>
+                </Link>
+                <Link to="/settings" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <CogIcon className="h-4 w-4 mr-2" />
+                  System Settings
+                </Link>
                 <div className="border-t border-gray-100"></div>
                 <button
                   onClick={handleLogout}

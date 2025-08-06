@@ -299,6 +299,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Admin has all permissions
     if (state.user.role === 'admin') return true;
     
+    // Check for wildcard permissions
+    const hasWildcard = state.user.permissions.some(
+      permission => permission.resource === '*' || 
+      (permission.resource === resource && permission.action === '*')
+    );
+    
+    if (hasWildcard) return true;
+    
     return state.user.permissions.some(
       permission => permission.resource === resource && permission.action === action
     );

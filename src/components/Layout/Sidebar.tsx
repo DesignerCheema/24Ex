@@ -26,6 +26,8 @@ const navigation = [
 ];
 
 export default function Sidebar() {
+  const { hasPermission } = useAuth();
+
   return (
     <div className="flex h-full w-64 flex-col bg-white shadow-lg">
       <div className="flex h-16 items-center justify-center border-b border-gray-200">
@@ -37,20 +39,22 @@ export default function Sidebar() {
       
       <nav className="flex-1 space-y-1 p-4">
         {navigation.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.href}
-            className={({ isActive }) =>
-              `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                isActive
-                  ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-              }`
-            }
-          >
-            <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-            {item.name}
-          </NavLink>
+          (hasPermission(getResourceFromPath(item.href), 'read') || item.href === '/') && (
+            <NavLink
+              key={item.name}
+              to={item.href}
+              className={({ isActive }) =>
+                `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                  isActive
+                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                }`
+              }
+            >
+              <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+              {item.name}
+            </NavLink>
+          )
         ))}
       </nav>
       
@@ -67,4 +71,19 @@ export default function Sidebar() {
       </div>
     </div>
   );
+}
+
+function getResourceFromPath(path: string): string {
+  const pathMap: Record<string, string> = {
+    '/orders': 'orders',
+    '/deliveries': 'deliveries',
+    '/transport': 'vehicles',
+    '/warehouse': 'warehouses',
+    '/returns': 'returns',
+    '/accounting': 'invoices',
+    '/analytics': 'analytics',
+    '/users': 'users',
+    '/settings': 'settings'
+  };
+  return pathMap[path] || 'dashboard';
 }
