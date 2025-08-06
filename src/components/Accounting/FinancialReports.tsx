@@ -4,8 +4,8 @@ import {
   DocumentArrowDownIcon,
   CalendarIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon
 } from '@heroicons/react/24/outline';
 import {
   LineChart,
@@ -99,9 +99,9 @@ export default function FinancialReports({ financialSummary, invoices, payments 
 
   const reportTabs = [
     { id: 'overview', label: 'Overview', icon: ChartBarIcon },
-    { id: 'revenue', label: 'Revenue Trends', icon: TrendingUpIcon },
+    { id: 'revenue', label: 'Revenue Trends', icon: ArrowTrendingUpIcon },
     { id: 'payments', label: 'Payment Analysis', icon: CurrencyDollarIcon },
-    { id: 'customers', label: 'Customer Insights', icon: TrendingDownIcon }
+    { id: 'customers', label: 'Customer Insights', icon: ArrowTrendingDownIcon }
   ];
 
   return (
@@ -253,9 +253,9 @@ export default function FinancialReports({ financialSummary, invoices, payments 
                       <span className="font-medium text-gray-900">${month.revenue.toLocaleString()}</span>
                       <div className={`flex items-center ${month.growth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {month.growth >= 0 ? (
-                          <TrendingUpIcon className="h-4 w-4 mr-1" />
+                          <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
                         ) : (
-                          <TrendingDownIcon className="h-4 w-4 mr-1" />
+                          <ArrowTrendingDownIcon className="h-4 w-4 mr-1" />
                         )}
                         <span className="text-sm font-medium">{month.growth.toFixed(1)}%</span>
                       </div>
