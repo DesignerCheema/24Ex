@@ -134,11 +134,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: userProfile.email,
           role: userProfile.role,
           phone: userProfile.phone,
-          avatar: userProfile.avatar,
           permissions: userProfile.permissions || [],
           isActive: userProfile.is_active,
           createdAt: new Date(userProfile.created_at),
-          lastLogin: userProfile.last_login ? new Date(userProfile.last_login) : undefined,
         };
 
         console.log('Dispatching LOGIN_SUCCESS with database user:', user);
@@ -158,9 +156,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name: session.user.email?.split('@')[0] || 'User',
         email: session.user.email || '',
         role: 'admin', // Default to admin for testing
+        phone: undefined,
+        avatar: undefined,
         permissions: [{ id: '1', name: 'All Access', resource: '*', action: 'read' }],
         isActive: true,
         createdAt: new Date(),
+        lastLogin: undefined,
       };
       
       console.log('Dispatching LOGIN_SUCCESS with fallback user:', basicUser);
@@ -178,9 +179,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name: session.user.email?.split('@')[0] || 'User',
         email: session.user.email || '',
         role: 'admin', // Default to admin for testing
+        phone: undefined,
+        avatar: undefined,
         permissions: [{ id: '1', name: 'All Access', resource: '*', action: 'read' }],
         isActive: true,
         createdAt: new Date(),
+        lastLogin: undefined,
       };
       
       console.log('Dispatching LOGIN_SUCCESS after error with emergency user:', basicUser);
