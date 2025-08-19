@@ -44,7 +44,24 @@ export default function PublicTracking() {
 
   const handleTrackOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleTrackOrderById(trackingId.trim());
+    if (!trackingId.trim()) return;
+
+    setLoading(true);
+    setError('');
+    setOrder(null);
+
+    try {
+      const foundOrder = await OrderService.getOrderByTrackingNumber(trackingId.trim());
+      if (foundOrder) {
+        setOrder(foundOrder);
+      } else {
+        setError('Order not found. Please check your tracking number and try again.');
+      }
+    } catch (err) {
+      setError('Unable to fetch order details. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleWhatsAppTracking = async (e: React.FormEvent) => {
