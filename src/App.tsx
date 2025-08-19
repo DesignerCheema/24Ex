@@ -14,6 +14,7 @@ import Accounting from './pages/Accounting';
 import Analytics from './pages/Analytics';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
+import PublicTracking from './pages/PublicTracking';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="users" element={<Users />} />
               <Route path="settings" element={<Settings />} />
             </Route>
+            <Route path="/track" element={<PublicTracking />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ProtectedRoute>

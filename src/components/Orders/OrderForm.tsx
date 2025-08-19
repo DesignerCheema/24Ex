@@ -3,6 +3,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { OrderFormData } from '../../types';
 import { Customer } from '../../types';
+import WhatsAppTrackingWidget from '../WhatsApp/WhatsAppTrackingWidget';
 
 interface OrderFormProps {
   isOpen: boolean;
@@ -421,6 +422,24 @@ export default function OrderForm({ isOpen, onClose, onSubmit, initialData, cust
                 />
               </div>
             </div>
+          </div>
+
+          {/* WhatsApp Tracking Option */}
+          <div className="bg-green-50 p-4 rounded-lg">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">WhatsApp Notifications</h3>
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                id="enableWhatsApp"
+                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+              />
+              <label htmlFor="enableWhatsApp" className="text-sm text-gray-700">
+                Enable WhatsApp tracking notifications for this order
+              </label>
+            </div>
+            <p className="text-xs text-green-600 mt-2">
+              Customer will receive real-time updates on their WhatsApp
+            </p>
           </div>
 
           {/* Form Actions */}
