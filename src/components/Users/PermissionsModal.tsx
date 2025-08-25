@@ -2,6 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { XMarkIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { User, Permission } from '../../types';
 
+// Import the function from AuthContext
+function getDefaultPermissions(role: User['role']): Permission[] {
+  switch (role) {
+    case 'admin':
+      return [
+        { id: '1', name: 'All Access', resource: '*', action: '*' as any }
+      ];
+    case 'dispatcher':
+      return [
+        { id: '2', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '3', name: 'Orders Update', resource: 'orders', action: 'update' as any },
+        { id: '4', name: 'Deliveries Read', resource: 'deliveries', action: 'read' as any },
+        { id: '5', name: 'Deliveries Update', resource: 'deliveries', action: 'update' as any },
+        { id: '6', name: 'Analytics Read', resource: 'analytics', action: 'read' as any },
+        { id: '7', name: 'Customers Read', resource: 'customers', action: 'read' as any },
+      ];
+    case 'agent':
+      return [
+        { id: '8', name: 'Deliveries Read', resource: 'deliveries', action: 'read' as any },
+        { id: '9', name: 'Deliveries Update', resource: 'deliveries', action: 'update' as any },
+        { id: '10', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '11', name: 'Vehicles Read', resource: 'vehicles', action: 'read' as any },
+      ];
+    case 'warehouse':
+      return [
+        { id: '12', name: 'Inventory Read', resource: 'inventory', action: 'read' as any },
+        { id: '13', name: 'Inventory Create', resource: 'inventory', action: 'create' as any },
+        { id: '14', name: 'Inventory Update', resource: 'inventory', action: 'update' as any },
+        { id: '15', name: 'Warehouses Read', resource: 'warehouses', action: 'read' as any },
+        { id: '16', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+      ];
+    case 'accounting':
+      return [
+        { id: '17', name: 'Invoices Read', resource: 'invoices', action: 'read' as any },
+        { id: '18', name: 'Invoices Create', resource: 'invoices', action: 'create' as any },
+        { id: '19', name: 'Invoices Update', resource: 'invoices', action: 'update' as any },
+        { id: '20', name: 'Reports Export', resource: 'reports', action: 'export' as any },
+        { id: '21', name: 'Analytics Read', resource: 'analytics', action: 'read' as any },
+      ];
+    case 'customer':
+      return [
+        { id: '22', name: 'Profile Read', resource: 'profile', action: 'read' as any },
+        { id: '23', name: 'Profile Update', resource: 'profile', action: 'update' as any },
+        { id: '24', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '25', name: 'Returns Create', resource: 'returns', action: 'create' as any },
+      ];
+    default:
+      return [];
+  }
+}
+
 interface PermissionsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -114,6 +165,16 @@ export default function PermissionsModal({ isOpen, onClose, user, onUpdatePermis
     }
   };
 
+  const handleApplyRoleDefaults = () => {
+    if (user) {
+      const defaultPermissions = getDefaultPermissions(user.role);
+      setSelectedPermissions(defaultPermissions);
+    }
+  };
+
+  const handleClearAll = () => {
+    setSelectedPermissions([]);
+  };
   const groupedPermissions = AVAILABLE_PERMISSIONS.reduce((acc, permission) => {
     if (!acc[permission.resource]) {
       acc[permission.resource] = [];
@@ -144,6 +205,30 @@ export default function PermissionsModal({ isOpen, onClose, user, onUpdatePermis
         </div>
 
         <div className="p-6 space-y-6">
+          {/* Permission Management Actions */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div>
+              <h3 className="text-sm font-medium text-gray-900">Quick Actions</h3>
+              <p className="text-xs text-gray-500">Apply default permissions or customize access</p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                type="button"
+                onClick={handleApplyRoleDefaults}
+                className="px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Apply Role Defaults
+              </button>
+              <button
+                type="button"
+                onClick={handleClearAll}
+                className="px-3 py-1 text-xs bg-gray-600 text-white rounded-md hover:bg-gray-700"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
           {Object.entries(groupedPermissions).map(([resource, permissions]) => (
             <div key={resource} className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-medium text-gray-900 mb-3 capitalize">
@@ -181,6 +266,11 @@ export default function PermissionsModal({ isOpen, onClose, user, onUpdatePermis
         <div className="flex items-center justify-between p-6 border-t border-gray-200">
           <div className="text-sm text-gray-500">
             {selectedPermissions.length} permissions selected
+            {user && (
+              <span className="ml-2 text-xs">
+                (Role: {user.role})
+              </span>
+            )}
           </div>
           <div className="flex space-x-3">
             <button

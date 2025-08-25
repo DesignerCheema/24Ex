@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
+import AdminSignupForm from './AdminSignupForm';
 
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'admin'>('login');
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-  };
+  const toggleToSignup = () => setAuthMode('signup');
+  const toggleToLogin = () => setAuthMode('login');
+  const toggleToAdmin = () => setAuthMode('admin');
 
-  return isLogin ? (
-    <LoginForm onToggleMode={toggleMode} />
-  ) : (
-    <SignupForm onToggleMode={toggleMode} />
-  );
+  switch (authMode) {
+    case 'signup':
+      return <SignupForm onToggleMode={toggleToLogin} onAdminMode={toggleToAdmin} />;
+    case 'admin':
+      return <AdminSignupForm onToggleMode={toggleToLogin} />;
+    default:
+      return <LoginForm onToggleMode={toggleToSignup} onAdminMode={toggleToAdmin} />;
+  }
 }

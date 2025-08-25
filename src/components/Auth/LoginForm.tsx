@@ -6,9 +6,10 @@ import { LoginCredentials } from '../../types';
 
 interface LoginFormProps {
   onToggleMode: () => void;
+  onAdminMode: () => void;
 }
 
-export default function LoginForm({ onToggleMode }: LoginFormProps) {
+export default function LoginForm({ onToggleMode, onAdminMode }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -64,6 +65,15 @@ export default function LoginForm({ onToggleMode }: LoginFormProps) {
               className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
             >
               create a new account
+            </button>
+          </p>
+          <p className="mt-1 text-xs text-gray-500">
+            System admin?{' '}
+            <button
+              onClick={onAdminMode}
+              className="font-medium text-red-600 hover:text-red-500 transition-colors"
+            >
+              Admin setup
             </button>
           </p>
         </div>

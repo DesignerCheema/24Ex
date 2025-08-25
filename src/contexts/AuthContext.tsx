@@ -305,6 +305,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Admin has all permissions
     if (state.user.role === 'admin') return true;
     
+    // Role-based access control
+    const rolePermissions = getRolePermissions(state.user.role);
+    const hasRolePermission = rolePermissions.some(
+      permission => permission.resource === resource && permission.action === action
+    );
+    
+    if (hasRolePermission) return true;
+    
     // Check for wildcard permissions
     const hasWildcard = state.user.permissions.some(
       permission => permission.resource === '*' || 
@@ -345,25 +353,44 @@ function getDefaultPermissions(role: User['role']) {
         { id: '3', name: 'Orders Update', resource: 'orders', action: 'update' as any },
         { id: '4', name: 'Deliveries Read', resource: 'deliveries', action: 'read' as any },
         { id: '5', name: 'Deliveries Update', resource: 'deliveries', action: 'update' as any },
+        { id: '6', name: 'Analytics Read', resource: 'analytics', action: 'read' as any },
+        { id: '7', name: 'Customers Read', resource: 'customers', action: 'read' as any },
       ];
     case 'agent':
       return [
-        { id: '6', name: 'Deliveries Read', resource: 'deliveries', action: 'read' as any },
-        { id: '7', name: 'Deliveries Update', resource: 'deliveries', action: 'update' as any },
+        { id: '8', name: 'Deliveries Read', resource: 'deliveries', action: 'read' as any },
+        { id: '9', name: 'Deliveries Update', resource: 'deliveries', action: 'update' as any },
+        { id: '10', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '11', name: 'Vehicles Read', resource: 'vehicles', action: 'read' as any },
       ];
     case 'warehouse':
       return [
-        { id: '8', name: 'Inventory Read', resource: 'inventory', action: 'read' as any },
-        { id: '9', name: 'Inventory Update', resource: 'inventory', action: 'update' as any },
-        { id: '10', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '12', name: 'Inventory Read', resource: 'inventory', action: 'read' as any },
+        { id: '13', name: 'Inventory Create', resource: 'inventory', action: 'create' as any },
+        { id: '14', name: 'Inventory Update', resource: 'inventory', action: 'update' as any },
+        { id: '15', name: 'Warehouses Read', resource: 'warehouses', action: 'read' as any },
+        { id: '16', name: 'Orders Read', resource: 'orders', action: 'read' as any },
       ];
     case 'accounting':
       return [
-        { id: '11', name: 'Invoices Read', resource: 'invoices', action: 'read' as any },
-        { id: '12', name: 'Invoices Create', resource: 'invoices', action: 'create' as any },
-        { id: '13', name: 'Reports Export', resource: 'reports', action: 'export' as any },
+        { id: '17', name: 'Invoices Read', resource: 'invoices', action: 'read' as any },
+        { id: '18', name: 'Invoices Create', resource: 'invoices', action: 'create' as any },
+        { id: '19', name: 'Invoices Update', resource: 'invoices', action: 'update' as any },
+        { id: '20', name: 'Reports Export', resource: 'reports', action: 'export' as any },
+        { id: '21', name: 'Analytics Read', resource: 'analytics', action: 'read' as any },
+      ];
+    case 'customer':
+      return [
+        { id: '22', name: 'Profile Read', resource: 'profile', action: 'read' as any },
+        { id: '23', name: 'Profile Update', resource: 'profile', action: 'update' as any },
+        { id: '24', name: 'Orders Read', resource: 'orders', action: 'read' as any },
+        { id: '25', name: 'Returns Create', resource: 'returns', action: 'create' as any },
       ];
     default:
       return [];
   }
+}
+
+function getRolePermissions(role: User['role']): Permission[] {
+  return getDefaultPermissions(role);
 }

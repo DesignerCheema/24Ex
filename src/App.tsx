@@ -35,9 +35,11 @@ function App() {
               <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="/track" element={<PublicTracking />} />
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </ProtectedRoute>
+        <Routes>
+          <Route path="/track" element={<PublicTracking />} />
+        </Routes>
       </AuthProvider>
     </Router>
   );

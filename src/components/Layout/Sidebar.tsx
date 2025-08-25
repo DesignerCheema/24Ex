@@ -27,7 +27,35 @@ const navigation = [
 ];
 
 export default function Sidebar() {
-  const { hasPermission } = useAuth();
+  const { hasPermission, state } = useAuth();
+
+  const getVisibleNavigation = () => {
+    return navigation.filter(item => {
+      // Dashboard is always visible
+      if (item.href === '/') return true;
+      
+      // Role-based navigation filtering
+      const resource = getResourceFromPath(item.href);
+      
+      // Special cases for role-specific access
+      switch (state.user?.role) {
+        case 'admin':
+          return true; // Admin sees everything
+        case 'customer':
+          return ['orders', 'returns'].includes(resource); // Customers only see orders and returns
+        case 'agent':
+          return ['orders', 'deliveries', 'vehicles'].includes(resource);
+        case 'dispatcher':
+          return ['orders', 'deliveries', 'analytics', 'customers'].includes(resource);
+        case 'warehouse':
+          return ['orders', 'warehouses', 'inventory'].includes(resource);
+        case 'accounting':
+          return ['orders', 'invoices', 'analytics'].includes(resource);
+        default:
+          return hasPermission(resource, 'read');
+      }
+    });
+  };
 
   return (
     <div className="flex h-full w-64 flex-col bg-white shadow-lg">
@@ -39,8 +67,7 @@ export default function Sidebar() {
       </div>
       
       <nav className="flex-1 space-y-1 p-4">
-        {navigation.map((item) => (
-          (hasPermission(getResourceFromPath(item.href), 'read') || item.href === '/') && (
+        {getVisibleNavigation().map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
@@ -55,18 +82,19 @@ export default function Sidebar() {
               <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
               {item.name}
             </NavLink>
-          )
         ))}
       </nav>
       
       <div className="border-t border-gray-200 p-4">
         <div className="flex items-center space-x-3">
           <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
-            <span className="text-white font-medium text-sm">AD</span>
+            <span className="text-white font-medium text-sm">
+              {state.user?.name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+            </span>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">Admin User</p>
-            <p className="text-xs text-gray-500">admin@24ex.com</p>
+            <p className="text-sm font-medium text-gray-900">{state.user?.name || 'User'}</p>
+            <p className="text-xs text-gray-500 capitalize">{state.user?.role || 'user'}</p>
           </div>
         </div>
       </div>
@@ -80,9 +108,11 @@ function getResourceFromPath(path: string): string {
     '/deliveries': 'deliveries',
     '/transport': 'vehicles',
     '/warehouse': 'warehouses',
+    '/inventory': 'inventory',
     '/returns': 'returns',
     '/accounting': 'invoices',
     '/analytics': 'analytics',
+    '/customers': 'customers',
     '/users': 'users',
     '/settings': 'settings'
   };

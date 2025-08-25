@@ -6,7 +6,8 @@ export interface UserFormData {
   email: string;
   role: User['role'];
   phone?: string;
-  permissions?: Permission[];
+  department?: string;
+  supervisor?: string;
   isActive?: boolean;
 }
 
@@ -64,7 +65,7 @@ export class UserService {
           email: userData.email,
           role: userData.role,
           phone: userData.phone,
-          permissions: userData.permissions || this.getDefaultPermissions(userData.role),
+          permissions: this.getDefaultPermissions(userData.role),
           is_active: userData.isActive !== false,
         })
         .select()
@@ -88,7 +89,6 @@ export class UserService {
           email: userData.email,
           role: userData.role,
           phone: userData.phone,
-          permissions: userData.permissions,
           is_active: userData.isActive,
         })
         .eq('id', id)

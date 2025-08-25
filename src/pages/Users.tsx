@@ -77,6 +77,9 @@ export default function Users() {
       setLoading(true);
       const newUser = await UserService.createUser(data);
       setUsers([newUser, ...users]);
+      
+      // Send welcome email with temporary password
+      alert(`User created successfully! A welcome email with login credentials has been sent to ${data.email}`);
     } catch (error) {
       console.error('Failed to create user:', error);
       alert('Failed to create user. Please try again.');
@@ -236,7 +239,10 @@ export default function Users() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600">Manage user accounts, roles, and permissions</p>
+          <p className="text-gray-600">Manage staff accounts, roles, and permissions</p>
+          <p className="text-sm text-blue-600 mt-1">
+            Customer accounts are created through public registration
+          </p>
         </div>
         <div className="flex items-center space-x-3">
           {selectedUsers.length > 0 && (
@@ -299,20 +305,20 @@ export default function Users() {
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Admins</p>
-              <p className="text-2xl font-bold text-red-600">{userStats.admins}</p>
+              <p className="text-sm font-medium text-gray-600">Staff Users</p>
+              <p className="text-2xl font-bold text-red-600">{users.filter(u => u.role !== 'customer').length}</p>
             </div>
-            <ShieldCheckIcon className="h-8 w-8 text-red-600" />
+            <UserIcon className="h-8 w-8 text-red-600" />
           </div>
         </div>
         
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Agents</p>
-              <p className="text-2xl font-bold text-blue-600">{userStats.agents}</p>
+              <p className="text-sm font-medium text-gray-600">Customers</p>
+              <p className="text-2xl font-bold text-blue-600">{users.filter(u => u.role === 'customer').length}</p>
             </div>
-            <UserIcon className="h-8 w-8 text-blue-600" />
+            <UserGroupIcon className="h-8 w-8 text-blue-600" />
           </div>
         </div>
         
@@ -580,6 +586,17 @@ export default function Users() {
         }}
         user={permissionsUser}
         onUpdatePermissions={handleUpdatePermissions}
+      />
+
+      {/* Role Assignment Modal */}
+      <RoleAssignmentModal
+        isOpen={isRoleAssignmentOpen}
+        onClose={() => {
+          setIsRoleAssignmentOpen(false);
+          setRoleAssignmentUser(null);
+        }}
+        user={roleAssignmentUser}
+        onAssignRole={handleAssignRole}
       />
 
       {/* Loading Overlay */}

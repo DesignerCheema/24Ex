@@ -107,13 +107,39 @@ export default function UserForm({ isOpen, onClose, onSubmit, initialData }: Use
                 <option value="agent">Delivery Agent</option>
                 <option value="warehouse">Warehouse Staff</option>
                 <option value="accounting">Accounting</option>
-                <option value="customer">Customer</option>
               </select>
               {errors.role && (
                 <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
               )}
+              <p className="mt-1 text-xs text-gray-500">
+                Customer accounts are created through public registration
+              </p>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Department</label>
+              <select
+                {...register('department')}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Select department</option>
+                <option value="operations">Operations</option>
+                <option value="logistics">Logistics</option>
+                <option value="customer_service">Customer Service</option>
+                <option value="finance">Finance</option>
+                <option value="it">IT</option>
+                <option value="management">Management</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Supervisor</label>
+              <input
+                {...register('supervisor')}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Enter supervisor name"
+              />
+            </div>
             <div className="md:col-span-2">
               <div className="flex items-center">
                 <input
@@ -133,13 +159,13 @@ export default function UserForm({ isOpen, onClose, onSubmit, initialData }: Use
 
           {/* Role Description */}
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-900 mb-2">Role Permissions</h3>
+            <h3 className="text-sm font-medium text-blue-900 mb-2">Role Responsibilities</h3>
             <div className="text-sm text-blue-800">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <div>• View and manage assigned tasks</div>
-                <div>• Access relevant modules</div>
-                <div>• Generate reports (if applicable)</div>
-                <div>• Update order statuses</div>
+              <div className="space-y-1">
+                <div>• Access will be granted based on role</div>
+                <div>• Permissions can be customized after creation</div>
+                <div>• Default permissions will be applied automatically</div>
+                <div>• Contact admin for special access requirements</div>
               </div>
             </div>
           </div>
