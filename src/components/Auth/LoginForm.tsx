@@ -58,24 +58,6 @@ export default function LoginForm({ onToggleMode, onAdminMode }: LoginFormProps)
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to your account</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Or{' '}
-            <button
-              onClick={onToggleMode}
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-            >
-              create a new account
-            </button>
-          </p>
-          <p className="mt-1 text-xs text-gray-500">
-            System admin?{' '}
-            <button
-              onClick={onAdminMode}
-              className="font-medium text-red-600 hover:text-red-500 transition-colors"
-            >
-              Admin setup
-            </button>
-          </p>
         </div>
 
         <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
