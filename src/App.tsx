@@ -5,6 +5,9 @@ import ProtectedRoute from './components/Layout/ProtectedRoute';
 import Layout from './components/Layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Orders from './pages/Orders';
+import CreateOrder from './pages/Orders/CreateOrder';
+import PendingOrders from './pages/Orders/PendingOrders';
+import CompletedOrders from './pages/Orders/CompletedOrders';
 import Deliveries from './pages/Deliveries';
 import Transport from './pages/Transport';
 import WarehousePage from './pages/Warehouse';
@@ -28,6 +31,9 @@ function App() {
               <Route path="deliveries" element={<Deliveries />} />
               <Route path="transport" element={<Transport />} />
               <Route path="warehouse" element={<WarehousePage />} />
+                  <Route path="orders/create" element={<CreateOrder />} />
+                  <Route path="orders/pending" element={<PendingOrders />} />
+                  <Route path="orders/completed" element={<CompletedOrders />} />
               <Route path="returns" element={<Returns />} />
               <Route path="accounting" element={<Accounting />} />
               <Route path="analytics" element={<Analytics />} />

@@ -11,11 +11,27 @@ import {
   CurrencyDollarIcon,
   UsersIcon,
   CogIcon
+  ChevronDownIcon,
+  ChevronRightIcon,
+  PlusIcon,
+  EyeIcon,
+  ClockIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Orders', href: '/orders', icon: ShoppingBagIcon },
+  { 
+    name: 'Orders', 
+    href: '/orders', 
+    icon: ShoppingBagIcon,
+    submenu: [
+      { name: 'All Orders', href: '/orders', icon: EyeIcon },
+      { name: 'Create Order', href: '/orders/create', icon: PlusIcon },
+      { name: 'Pending Orders', href: '/orders/pending', icon: ClockIcon },
+      { name: 'Completed Orders', href: '/orders/completed', icon: CheckCircleIcon },
+    ]
+  },
   { name: 'Deliveries', href: '/deliveries', icon: TruckIcon },
   { name: 'Transport', href: '/transport', icon: TruckIcon },
   { name: 'Warehouse', href: '/warehouse', icon: BuildingStorefrontIcon },
@@ -28,7 +44,15 @@ const navigation = [
 
 export default function Sidebar() {
   const { hasPermission, state } = useAuth();
+  const [expandedMenus, setExpandedMenus] = React.useState<string[]>(['Orders']);
 
+  const toggleSubmenu = (menuName: string) => {
+    setExpandedMenus(prev => 
+      prev.includes(menuName) 
+        ? prev.filter(name => name !== menuName)
+        : [...prev, menuName]
+    );
+  };
   const getVisibleNavigation = () => {
     return navigation.filter(item => {
       // Dashboard is always visible
@@ -68,20 +92,60 @@ export default function Sidebar() {
       
       <nav className="flex-1 space-y-1 p-4">
         {getVisibleNavigation().map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive }) =>
-                `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                  isActive
-                    ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                }`
-              }
-            >
-              <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-              {item.name}
-            </NavLink>
+          <div key={item.name}>
+            {item.submenu ? (
+              <>
+                <button
+                  onClick={() => toggleSubmenu(item.name)}
+                  className="group flex items-center justify-between w-full px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                >
+                  <div className="flex items-center">
+                    <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+                    {item.name}
+                  </div>
+                  {expandedMenus.includes(item.name) ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronRightIcon className="h-4 w-4" />
+                  )}
+                </button>
+                {expandedMenus.includes(item.name) && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    {item.submenu.map((subItem) => (
+                      <NavLink
+                        key={subItem.name}
+                        to={subItem.href}
+                        className={({ isActive }) =>
+                          `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                            isActive
+                              ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
+                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          }`
+                        }
+                      >
+                        <subItem.icon className="mr-3 h-4 w-4 flex-shrink-0" />
+                        {subItem.name}
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <NavLink
+                to={item.href}
+                className={({ isActive }) =>
+                  `group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                    isActive
+                      ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                  }`
+                }
+              >
+                <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+                {item.name}
+              </NavLink>
+            )}
+          </div>
         ))}
       </nav>
       
