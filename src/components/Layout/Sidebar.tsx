@@ -16,7 +16,19 @@ import {
   PlusIcon,
   EyeIcon,
   ClockIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  MapPinIcon,
+  UserIcon,
+  WrenchScrewdriverIcon,
+  BoltIcon,
+  CubeIcon,
+  ArchiveBoxIcon,
+  ClipboardDocumentListIcon,
+  DocumentTextIcon,
+  CreditCardIcon,
+  ShieldCheckIcon,
+  ServerStackIcon,
+  CloudIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -32,19 +44,99 @@ const navigation = [
       { name: 'Completed Orders', href: '/orders/completed', icon: CheckCircleIcon },
     ]
   },
-  { name: 'Deliveries', href: '/deliveries', icon: TruckIcon },
-  { name: 'Transport', href: '/transport', icon: TruckIcon },
-  { name: 'Warehouse', href: '/warehouse', icon: BuildingStorefrontIcon },
-  { name: 'Returns', href: '/returns', icon: ArrowUturnLeftIcon },
-  { name: 'Accounting', href: '/accounting', icon: CurrencyDollarIcon },
-  { name: 'Analytics', href: '/analytics', icon: ChartBarIcon },
-  { name: 'Users', href: '/users', icon: UsersIcon },
-  { name: 'Settings', href: '/settings', icon: CogIcon },
+  { 
+    name: 'Deliveries', 
+    href: '/deliveries', 
+    icon: TruckIcon,
+    submenu: [
+      { name: 'Active Deliveries', href: '/deliveries', icon: TruckIcon },
+      { name: 'Route Planning', href: '/deliveries/routes', icon: MapPinIcon },
+      { name: 'Delivery Agents', href: '/deliveries/agents', icon: UserIcon },
+      { name: 'Delivery History', href: '/deliveries/history', icon: ClockIcon },
+    ]
+  },
+  { 
+    name: 'Transport', 
+    href: '/transport', 
+    icon: TruckIcon,
+    submenu: [
+      { name: 'Fleet Overview', href: '/transport', icon: TruckIcon },
+      { name: 'Add Vehicle', href: '/transport/add', icon: PlusIcon },
+      { name: 'Maintenance', href: '/transport/maintenance', icon: WrenchScrewdriverIcon },
+      { name: 'Fuel Tracking', href: '/transport/fuel', icon: BoltIcon },
+    ]
+  },
+  { 
+    name: 'Warehouse', 
+    href: '/warehouse', 
+    icon: BuildingStorefrontIcon,
+    submenu: [
+      { name: 'Overview', href: '/warehouse', icon: BuildingStorefrontIcon },
+      { name: 'Inventory', href: '/warehouse/inventory', icon: CubeIcon },
+      { name: 'Receiving', href: '/warehouse/receiving', icon: ArchiveBoxIcon },
+      { name: 'Picking Tasks', href: '/warehouse/picking', icon: ClipboardDocumentListIcon },
+    ]
+  },
+  { 
+    name: 'Returns', 
+    href: '/returns', 
+    icon: ArrowUturnLeftIcon,
+    submenu: [
+      { name: 'All Returns', href: '/returns', icon: ArrowUturnLeftIcon },
+      { name: 'Create Return', href: '/returns/create', icon: PlusIcon },
+      { name: 'Pending Returns', href: '/returns/pending', icon: ClockIcon },
+      { name: 'Processed Returns', href: '/returns/processed', icon: CheckCircleIcon },
+    ]
+  },
+  { 
+    name: 'Accounting', 
+    href: '/accounting', 
+    icon: CurrencyDollarIcon,
+    submenu: [
+      { name: 'Overview', href: '/accounting', icon: CurrencyDollarIcon },
+      { name: 'Invoices', href: '/accounting/invoices', icon: DocumentTextIcon },
+      { name: 'Payments', href: '/accounting/payments', icon: CreditCardIcon },
+      { name: 'Reports', href: '/accounting/reports', icon: ChartBarIcon },
+    ]
+  },
+  { 
+    name: 'Analytics', 
+    href: '/analytics', 
+    icon: ChartBarIcon,
+    submenu: [
+      { name: 'Dashboard', href: '/analytics', icon: ChartBarIcon },
+      { name: 'Order Analytics', href: '/analytics/orders', icon: ShoppingBagIcon },
+      { name: 'Delivery Analytics', href: '/analytics/delivery', icon: TruckIcon },
+      { name: 'Financial Analytics', href: '/analytics/financial', icon: CurrencyDollarIcon },
+    ]
+  },
+  { 
+    name: 'Users', 
+    href: '/users', 
+    icon: UsersIcon,
+    submenu: [
+      { name: 'All Users', href: '/users', icon: UsersIcon },
+      { name: 'Add User', href: '/users/add', icon: PlusIcon },
+      { name: 'Roles & Permissions', href: '/users/roles', icon: ShieldCheckIcon },
+      { name: 'User Activity', href: '/users/activity', icon: ClockIcon },
+    ]
+  },
+  { 
+    name: 'Settings', 
+    href: '/settings', 
+    icon: CogIcon,
+    submenu: [
+      { name: 'General', href: '/settings', icon: CogIcon },
+      { name: 'Security', href: '/settings/security', icon: ShieldCheckIcon },
+      { name: 'System', href: '/settings/system', icon: ServerStackIcon },
+      { name: 'Backup', href: '/settings/backup', icon: CloudIcon },
+    ]
+  },
 ];
 
 export default function Sidebar() {
   const { hasPermission, state } = useAuth();
-  const [expandedMenus, setExpandedMenus] = React.useState<string[]>(['Orders']);
+  const [expandedMenus, setExpandedMenus] = React.useState<string[]>([]);
 
   const toggleSubmenu = (menuName: string) => {
     setExpandedMenus(prev => 
