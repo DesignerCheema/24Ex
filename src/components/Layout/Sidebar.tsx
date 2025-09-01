@@ -10,7 +10,7 @@ import {
   ArrowUturnLeftIcon,
   CurrencyDollarIcon,
   UsersIcon,
-  CogIcon
+  CogIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   PlusIcon,
