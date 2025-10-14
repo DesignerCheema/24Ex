@@ -257,12 +257,6 @@ export default function OrderViewModal({ isOpen, onClose, order }: OrderViewModa
           >
             Close
           </button>
-          <button
-            onClick={() => window.open(`/track?id=${order.trackingNumber}`, '_blank')}
-            className="px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700 transition-colors"
-          >
-            Share Tracking
-          </button>
           <button className="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors">
             Print Order
           </button>

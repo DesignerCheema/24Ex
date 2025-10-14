@@ -1,7 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { Order, OrderFormData, Customer } from '../types';
 import { WarehouseService } from './warehouseService';
-import { mockOrders } from '../data/mockData';
 
 export class OrderService {
   static async getAllOrders(): Promise<Order[]> {
@@ -206,52 +205,6 @@ export class OrderService {
       }));
     } catch (error) {
       console.error('Error fetching customers:', error);
-      throw error;
-    }
-  }
-
-  static async getOrderByTrackingNumber(trackingNumber: string): Promise<Order | null> {
-    try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          customers (*)
-        `)
-        .eq('tracking_number', trackingNumber)
-        .single();
-
-      if (error) {
-        // If not found in database, check mock data
-        const mockOrder = mockOrders.find(order => order.trackingNumber === trackingNumber);
-        return mockOrder || null;
-      }
-
-      return data ? this.transformDatabaseOrder(data) : null;
-    } catch (error) {
-      console.error('Error fetching order by tracking number:', error);
-      // Fallback to mock data
-      const mockOrder = mockOrders.find(order => order.trackingNumber === trackingNumber);
-      return mockOrder || null;
-    }
-  }
-
-  static async enableWhatsAppTracking(orderId: string, whatsappNumber: string): Promise<void> {
-    try {
-      // In a real implementation, this would:
-      // 1. Store the WhatsApp number for the order
-      // 2. Set up webhook notifications
-      // 3. Send confirmation message
-      
-      console.log(`WhatsApp tracking enabled for order ${orderId} with number ${whatsappNumber}`);
-      
-      // Mock API call to WhatsApp service
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In production, you would integrate with WhatsApp Business API
-      // or a service like Twilio WhatsApp API
-    } catch (error) {
-      console.error('Error enabling WhatsApp tracking:', error);
       throw error;
     }
   }

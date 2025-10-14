@@ -6,10 +6,9 @@ import { SignupData } from '../../types';
 
 interface SignupFormProps {
   onToggleMode: () => void;
-  onAdminMode: () => void;
 }
 
-export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProps) {
+export default function SignupForm({ onToggleMode }: SignupFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -127,20 +126,22 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
 
             <div>
               <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                Account Type
+                Role
               </label>
               <select
                 {...register('role', { required: 'Role is required' })}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
+                <option value="">Select a role</option>
+                <option value="dispatcher">Dispatcher</option>
+                <option value="agent">Delivery Agent</option>
+                <option value="warehouse">Warehouse Staff</option>
+                <option value="accounting">Accounting</option>
                 <option value="customer">Customer</option>
               </select>
               {errors.role && (
                 <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
               )}
-              <p className="mt-1 text-xs text-gray-500">
-                Only customer accounts can be created through public registration
-              </p>
             </div>
 
             <div>
@@ -204,17 +205,6 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
             </button>
           </form>
         </div>
-          <div className="mt-6 text-center">
-            <p className="text-xs text-gray-500 mb-2">
-              Need to create staff accounts?{' '}
-              <button
-                onClick={onAdminMode}
-                className="font-medium text-red-600 hover:text-red-500 transition-colors"
-              >
-                Admin setup
-              </button>
-            </p>
-          </div>
       </div>
     </div>
   );

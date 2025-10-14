@@ -6,10 +6,9 @@ import { LoginCredentials } from '../../types';
 
 interface LoginFormProps {
   onToggleMode: () => void;
-  onAdminMode: () => void;
 }
 
-export default function LoginForm({ onToggleMode, onAdminMode }: LoginFormProps) {
+export default function LoginForm({ onToggleMode }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -58,6 +57,15 @@ export default function LoginForm({ onToggleMode, onAdminMode }: LoginFormProps)
             </div>
           </div>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to your account</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Or{' '}
+            <button
+              onClick={onToggleMode}
+              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+            >
+              create a new account
+            </button>
+          </p>
         </div>
 
         <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
