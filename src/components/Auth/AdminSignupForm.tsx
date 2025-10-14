@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { EyeIcon, EyeSlashIcon, TruckIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, TruckIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
 import { SignupData } from '../../types';
 
-interface SignupFormProps {
+interface AdminSignupFormProps {
   onToggleMode: () => void;
-  onAdminMode: () => void;
 }
 
-export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProps) {
+export default function AdminSignupForm({ onToggleMode }: AdminSignupFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [adminKey, setAdminKey] = useState('');
   const { signup } = useAuth();
 
   const {
@@ -25,45 +25,51 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
   const password = watch('password');
 
   const onSubmit = async (data: SignupData & { confirmPassword: string }) => {
+    // Verify admin key
+    if (adminKey !== 'ADMIN_SETUP_KEY_2024') {
+      setError('Invalid admin setup key. Contact system administrator.');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
 
     try {
       const { confirmPassword, ...signupData } = data;
+      // Force admin role for admin signup
+      signupData.role = 'admin';
+      
       const result = await signup(signupData);
       if (!result.success) {
-        setError(result.error || 'Signup failed. Please try again.');
+        setError(result.error || 'Admin registration failed. Please try again.');
       }
     } catch (err) {
-      setError('Signup failed. Please try again.');
+      setError('Admin registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="flex justify-center">
             <div className="flex items-center space-x-2">
-              <TruckIcon className="h-12 w-12 text-blue-600" />
-              <span className="text-3xl font-bold text-gray-900">24EX</span>
+              <ShieldCheckIcon className="h-12 w-12 text-red-600" />
+              <span className="text-3xl font-bold text-gray-900">24EX Admin</span>
             </div>
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Admin Registration</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Or{' '}
-            <button
-              onClick={onToggleMode}
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-            >
-              sign in to existing account
-            </button>
+            Create an administrator account
+          </p>
+          <p className="mt-1 text-xs text-red-600">
+            Requires admin setup key
           </p>
         </div>
 
-        <div className="bg-white py-8 px-6 shadow-xl rounded-lg">
+        <div className="bg-white py-8 px-6 shadow-xl rounded-lg border-2 border-red-200">
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
               {error}
@@ -71,9 +77,27 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {/* Admin Setup Key */}
+            <div>
+              <label htmlFor="adminKey" className="block text-sm font-medium text-gray-700">
+                Admin Setup Key *
+              </label>
+              <input
+                type="password"
+                value={adminKey}
+                onChange={(e) => setAdminKey(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                placeholder="Enter admin setup key"
+                required
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Contact your system administrator for the setup key
+              </p>
+            </div>
+
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
+                Full Name *
               </label>
               <input
                 {...register('name', {
@@ -84,7 +108,7 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
                   },
                 })}
                 type="text"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 placeholder="Enter your full name"
               />
               {errors.name && (
@@ -94,7 +118,7 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                Email address *
               </label>
               <input
                 {...register('email', {
@@ -105,7 +129,7 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
                   },
                 })}
                 type="email"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -115,50 +139,39 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
 
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                Phone Number
+                Phone Number *
               </label>
               <input
-                {...register('phone')}
+                {...register('phone', { required: 'Phone number is required' })}
                 type="tel"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 placeholder="Enter your phone number"
               />
-            </div>
-
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-                Account Type
-              </label>
-              <select
-                {...register('role', { required: 'Role is required' })}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="customer">Customer</option>
-              </select>
-              {errors.role && (
-                <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
               )}
-              <p className="mt-1 text-xs text-gray-500">
-                Only customer accounts can be created through public registration
-              </p>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                Password *
               </label>
               <div className="mt-1 relative">
                 <input
                   {...register('password', {
                     required: 'Password is required',
                     minLength: {
-                      value: 6,
-                      message: 'Password must be at least 6 characters',
+                      value: 8,
+                      message: 'Password must be at least 8 characters',
+                    },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+                      message: 'Password must contain uppercase, lowercase, and number',
                     },
                   })}
                   type={showPassword ? 'text' : 'password'}
-                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter your password"
+                  className="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                  placeholder="Enter a strong password"
                 />
                 <button
                   type="button"
@@ -179,7 +192,7 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                Confirm Password *
               </label>
               <input
                 {...register('confirmPassword', {
@@ -187,7 +200,7 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
                   validate: (value) => value === password || 'Passwords do not match',
                 })}
                 type="password"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (
@@ -195,26 +208,38 @@ export default function SignupForm({ onToggleMode, onAdminMode }: SignupFormProp
               )}
             </div>
 
+            {/* Admin Privileges Notice */}
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center space-x-2 mb-2">
+                <ShieldCheckIcon className="h-5 w-5 text-red-600" />
+                <h3 className="text-sm font-medium text-red-900">Administrator Privileges</h3>
+              </div>
+              <div className="text-sm text-red-800 space-y-1">
+                <div>• Full system access and control</div>
+                <div>• User management and role assignment</div>
+                <div>• System configuration and settings</div>
+                <div>• Data export and backup capabilities</div>
+              </div>
+            </div>
+
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? 'Creating account...' : 'Create account'}
+              {isLoading ? 'Creating admin account...' : 'Create Admin Account'}
             </button>
           </form>
-        </div>
+
           <div className="mt-6 text-center">
-            <p className="text-xs text-gray-500 mb-2">
-              Need to create staff accounts?{' '}
-              <button
-                onClick={onAdminMode}
-                className="font-medium text-red-600 hover:text-red-500 transition-colors"
-              >
-                Admin setup
-              </button>
-            </p>
+            <button
+              onClick={onToggleMode}
+              className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              ← Back to regular login
+            </button>
           </div>
+        </div>
       </div>
     </div>
   );
